@@ -16,7 +16,6 @@ category-encoders==2.6.3
 certifi==2024.2.2
 charset-normalizer==3.3.2
 click==8.1.7
-cloudpickle==2.3.0
 comm==0.2.0
 conda-repo-cli==1.0.75
 contextlib2==21.6.0
