@@ -28,7 +28,7 @@ credentials =   {"type": st.secrets['type'],
 
 json_str = json.dumps(credentials)  
 
-creds = Credentials.from_service_account_file(json_str, scopes=scopes)
+creds = Credentials.from_service_account_file(credentials, scopes=scopes)
 client = gspread.authorize(creds)
 
 
