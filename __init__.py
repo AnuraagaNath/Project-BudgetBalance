@@ -1,2 +1,2 @@
-from dotenv import load_dotenv
-from gsheet import Data, CreateTable, Updater
+from gsheet import Data
+from gsheet import Updater

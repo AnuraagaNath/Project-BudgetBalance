@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from gsheet import CreateTable, Updater
+from gsheet import Updater
 
 
 
