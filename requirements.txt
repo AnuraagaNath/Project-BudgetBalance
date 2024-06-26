@@ -11,3 +11,4 @@ scipy==1.11.2
 scrapy==2.10.1
 seaborn==0.12.2
 gspread==6.1.2
+dotenv-python==0.0.1
