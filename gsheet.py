@@ -3,6 +3,10 @@ import streamlit as st
 import gspread
 import pandas as pd
 from google.oauth2.service_account import Credentials
+import json
+
+
+
 
 
 scopes = [
@@ -21,7 +25,10 @@ credentials =   {"type": st.secrets['type'],
   "client_x509_cert_url": st.secrets['client_x509_cert_url'],
   "universe_domain": st.secrets['universe_domain']}
 
-creds = Credentials.from_service_account_file(credentials, scopes=scopes)
+
+json_str = json.dumps(credentials)  
+
+creds = Credentials.from_service_account_file(json_str, scopes=scopes)
 client = gspread.authorize(creds)
 
 
