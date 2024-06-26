@@ -21,7 +21,7 @@ credentials =   {"type": st.secrets['type'],
   "client_x509_cert_url": st.secrets['client_x509_cert_url'],
   "universe_domain": st.secrets['universe_domain']}
 
-creds = Credentials.from_service_account_file('cred.json', scopes=scopes)
+creds = Credentials.from_service_account_file(credentials, scopes=scopes)
 client = gspread.authorize(creds)
 
 
