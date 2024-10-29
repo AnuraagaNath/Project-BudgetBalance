@@ -1,51 +1,55 @@
 import pandas as pd
 import streamlit as st
-from gsheet import Updater
+from gsheet import CreditSheetUpdater, DebitSheetUpdater
 
 
 
-# functionality
+# Title
 st.title('Project-BalanceBudget')
-
-if st.button('Reload'):
-    st.rerun()
     
+# Check Balance
 if st.button('Check Balance'):
-    updater = Updater()
+    updater = CreditSheetUpdater()
     st.markdown(f' #### Current balance: {updater.getCurrentBalance()}')
 
 
+# Debit Section
+st.markdown('### Debit')
+with st.form("Debit", clear_on_submit=True):
+    expense_type = st.selectbox('Expense Type:', ['Others', 'Cab', 'Rail', 'Metro', 'Subscription', 'Dine Out', 'Health', 'Shopping', 'Mom\'s Expense', 'Dad\'s Expense'])
+    expense_details = st.text_input('Enter Details')
+    dateofexpense = st.date_input('Enter Date')
+    expense_amount = st.number_input('Amount of the expense', value=None)
+    submit_button1 = st.form_submit_button("Enter")
+
+    if expense_type and expense_amount and submit_button1:
+        updater = DebitSheetUpdater()
+        updater.update_expense(dateofexpense = str(dateofexpense), 
+                            expense_type = expense_type, 
+                            expense_details=expense_details, 
+                            expense_amount = expense_amount)
+        
+        st.success(f'Sucessfully added ₹{expense_amount} for {expense_type} to the Credit sheet')
+        st.session_state.number_input = None
+
+    elif (not expense_type or not expense_amount) and submit_button1:
+        st.warning('Please enter all the details')
 
 
 
-st.markdown('### Expense')
-expense_type = st.selectbox('Expense Type:', ['Other Expenses', 'Travel', 'Food', 'Medicine', 'Clothes', 'Electronics Appliances'])
-dateofexpense = st.date_input('Enter Date')
-expense_amount = st.number_input('Amount of the expense', value=None)
-
-if expense_type and expense_amount and st.button('Enter', key='Done1'):
-    updater = Updater()
-    updater.update_expense(dateofexpense = str(dateofexpense),
-                                           expense_type = expense_type, 
-                                           expense_amount = expense_amount)
-    total_expense = updater.getTotalExpense()
-    st.success('Sucessfully added to the balance sheet')
-    st.text(f'Total amount of expense of all time (Todo: By month): {total_expense} \n Current balance remaining is {updater.getCurrentBalance()}')
-    st.session_state.number_input = None
-elif (not expense_type or not expense_amount) and st.button('Enter', key='Empty1'):
-    st.warning('Please enter all the details')
-
-
-
-
-st.markdown('### Added Balance')
-added_balance = st.number_input('Amount of money added', value=None)
-if added_balance and st.button('Enter', key='Done2'):
-    updater = Updater()
-    updater.update_AddedBalance(added_balance)
-    st.success(f'Sucessfully added ₹{added_balance} to the balance sheet')
-    st.session_state.number_input = None
-elif not added_balance and st.button('Enter', key='Empty2'):
-    st.warning('Please enter all the details')
+# Credit Section
+st.markdown('### Credit')
+with st.form("Credit", clear_on_submit=True):
+    date_income = st.date_input('Date')
+    type_bal = st.selectbox('Type', ['UPI', 'Cash'])
+    added_balance = st.number_input('Amount of money added', value=None)
+    submit_button2 = st.form_submit_button("Enter")
+    if added_balance and submit_button2:
+        updater = CreditSheetUpdater()
+        updater.update_AddedBalance(str(date_income), added_balance, type_bal)
+        st.success(f'Sucessfully added ₹{added_balance} via {type_bal} to the Debit sheet')
+        st.session_state.number_input = None
+    elif not added_balance and submit_button2:
+        st.warning('Please enter all the details')
 
 
