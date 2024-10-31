@@ -129,13 +129,13 @@ class CreditSheetUpdater(CreditSheet):
             self.sheet.update_acell(f'C{next_row}', added_balance)
             self.sheet.update_acell(f'B{next_row}', 0)
         prev_balance = self.getCurrentBalance()
-        totalAddedBalance = int(self.sheet.acell(f'B{next_row}').value) + int(self.sheet.acell(f'C{next_row}').value) + prev_balance
+        totalAddedBalance = float(self.sheet.acell(f'B{next_row}').value) + float(self.sheet.acell(f'C{next_row}').value) + prev_balance
         self.sheet.update_acell(f'D{next_row}', totalAddedBalance)
 
 
         debitsheet = DebitSheetUpdater()
         balance_left = totalAddedBalance - debitsheet.getTotalExpense()
 
-        self.sheet.update_acell(f'E{next_row}', balance_left)
+        self.sheet.update_acell(f'E{next_row}', round(balance_left, 2))
 
         

@@ -45,7 +45,7 @@ with st.form("Credit", clear_on_submit=True):
     submit_button2 = st.form_submit_button("Enter")
     if added_balance and submit_button2:
         updater = CreditSheetUpdater()
-        updater.update_AddedBalance(str(date_income), added_balance, type_bal)
+        updater.update_AddedBalance(str(date_income), float(added_balance), type_bal)
         st.success(f'Sucessfully added ₹{added_balance} via {type_bal} to the Debit sheet')
         st.session_state.number_input = None
     elif not added_balance and submit_button2:
