@@ -106,7 +106,7 @@ class BalanceSheet:
             currbalance += added_balance
 
         self.sheet.update_acell(f'A{self.next_available_row()}', currbalance)
-        self.sheet.update_acell(f'A{self.next_available_row()}', date)
+        self.sheet.update_acell(f'B{self.next_available_row()}', date)
 
 class DebitSheet:
     def __init__(self):
