@@ -2,6 +2,7 @@ import streamlit as st
 import gspread
 import pandas as pd
 from google.oauth2.service_account import Credentials
+from datetime import datetime
 
 # for offline credential loading
 # from dotenv import dotenv_values
@@ -95,7 +96,7 @@ class BalanceSheet:
         currbalance = float(prev_balance) 
         return currbalance
 
-    def updateBalance(self, date, update, expense_amount = None, added_balance = None):
+    def updateBalance(self, dateofTransaction, update, expense_amount = None, added_balance = None):
         
         currbalance = self.currBalance()
 
@@ -105,8 +106,9 @@ class BalanceSheet:
         if update == "Credit":
             currbalance += added_balance
 
-        self.sheet.update_acell(f'A{self.next_available_row()}', currbalance)
-        self.sheet.update_acell(f'B{self.next_available_row()}', date)
+        next_row = self.next_available_row()
+        self.sheet.update_acell(f'A{next_row}', currbalance)
+        self.sheet.update_acell(f'B{next_row}', dateofTransaction)
 
 class DebitSheet:
     def __init__(self):

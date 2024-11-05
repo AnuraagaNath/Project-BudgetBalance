@@ -36,7 +36,7 @@ with st.form("Debit", clear_on_submit=True):
                 expense_amount = expense_amount)
         
         balance = BalanceSheet()
-        balance.updateBalance(date=dateofexpense, update="Debit", expense_amount=expense_amount)
+        balance.updateBalance(dateofTransaction=str(dateofexpense), update="Debit", expense_amount=expense_amount)
         # db.addDebit(date=dateofexpense, expense_type=expense_type, details=expense_details, expense_amount=expense_amount)
         
         st.success(f'Sucessfully added ₹{expense_amount} for {expense_type} to the debit sheet')
@@ -58,7 +58,7 @@ with st.form("Credit", clear_on_submit=True):
         updater = CreditSheetUpdater()
         updater.update_AddedBalance(str(date_income), float(added_balance), type_bal)
         balance = BalanceSheet()
-        balance.updateBalance(date=date_income, update="Credit", added_balance=added_balance)
+        balance.updateBalance(dateofTransaction=str(date_income), update="Credit", added_balance=added_balance)
         # if type_bal == "Cash":
         #     db.addCredit(date_income, added_cash=added_balance, added_upi=0)
         # elif type_bal == "UPI":
