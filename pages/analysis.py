@@ -1,13 +1,14 @@
 import streamlit as st
 import pandas as pd
-from gsheet import Data
+# from gsheet import Data
 import plotly.express as px
+from database import Database
 
-data = Data()
+db = Database()
 
-credit = data.getCreditData()
+credit = db.fetchCredit()
 
-debit = data.getDebitData()
+debit = db.fetchDebit()
 
 st.title('Budget Analysis')
 
@@ -22,8 +23,8 @@ debit['Date'] = pd.to_datetime(debit['Date'], format='mixed')
 
 # Expense over date
 st.markdown('## Expense over Time')
-datewise = debit.groupby('Date')['Expense Amount'].sum().reset_index()
+datewise = debit.groupby('Date')['Expense_Amount'].sum().reset_index()
 
-expenses = px.line(data_frame=datewise, x='Date', y='Expense Amount', markers='o', title='Expense over time').update_layout(xaxis_title='Date', yaxis_title='Amount')
+expenses = px.line(data_frame=datewise, x='Date', y='Expense_Amount', markers='o', title='Expense over time').update_layout(xaxis_title='Date', yaxis_title='Amount')
 
 st.plotly_chart(expenses)

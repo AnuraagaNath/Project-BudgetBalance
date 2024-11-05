@@ -45,9 +45,71 @@ class Data:
         return df
 
 
+
+# update current balance
+def updateBalance():
+    def getLastExpense():
+        sheet = DebitSheet()
+        expenses = sheet.col_values(4)
+        last_total_expense = expenses[-1] if expenses and len(expenses)>1 else 0
+        return float(last_total_expense) 
+
+    def getLastBalance():
+        sheet = CreditSheet()
+        balances = sheet.col_values(5)
+        last_balance = balances[-1] if balances and len(balances)>1 else 0
+        return float(last_balance) 
+
+    last_balance = getLastBalance()
+    last_expense = getLastExpense()
+
+    sheet = CreditSheet()
+
+    sheet.update_acell(f'E{sheet.next_available_row()}', last_balance-last_expense)
+
+
+class BalanceSheet:
+    def __init__(self):
+        self.sheet = self.initialize_sheet('Balance')
+
+    def initialize_sheet(self, SheetId):   
+        sheet = workbook.worksheet(SheetId)
+
+        def update_if_empty(cell, placeholder):
+            if sheet.acell(cell).value is None:
+                sheet.update_acell(cell, placeholder)
+
+        update_if_empty('A1', 'Date')
+        update_if_empty('B1', 'Balance')
+
+        return sheet
+
+    def next_available_row(self):
+        str_list = list(filter(None, self.sheet.col_values(1)))
+        return str(len(str_list)+1)
+
+    
+    def currBalance(self):
+        balances = self.sheet.col_values(1)
+        prev_balance = balances[-1] if  balances and len(balances)>1 else 0
+        currbalance = float(prev_balance) 
+        return currbalance
+
+    def updateBalance(self, update, expense_amount = None, added_balance = None):
+        
+        currbalance = self.currBalance()
+
+        if update == "Debit":
+            currbalance -= expense_amount
+        
+        if update == "Credit":
+            currbalance += added_balance
+
+        self.sheet.update_acell(f'A{self.next_available_row()}', currbalance)
+
 class DebitSheet:
     def __init__(self):
-            self.sheet = self.initialize_sheet('Debit')
+        self.sheet = self.initialize_sheet('Debit')
 
     def initialize_sheet(self, SheetId):   
         sheet = workbook.worksheet(SheetId)
@@ -58,7 +120,7 @@ class DebitSheet:
 
         update_if_empty('A1', 'Date')
         update_if_empty('B1', 'Expense Type')
-        update_if_empty('C1', 'Budget')
+        update_if_empty('C1', 'Details')
         update_if_empty('D1', 'Expense Amount')
         update_if_empty('E1', 'Total Expense')
 
@@ -83,7 +145,6 @@ class CreditSheet:
         update_if_empty('B1', 'Balance Cash')
         update_if_empty('C1', 'Balance UPI')
         update_if_empty('D1', 'Total Added Balance')
-        update_if_empty('E1', 'Total Balance')
 
         return sheet
     
@@ -92,7 +153,6 @@ class CreditSheet:
         return str(len(str_list)+1)
 
 class DebitSheetUpdater(DebitSheet):
-    
     def update_expense(self, dateofexpense, expense_type, expense_details, expense_amount):
         next_row = self.next_available_row()
         self.sheet.update_acell(f'A{next_row}', dateofexpense)
@@ -105,20 +165,9 @@ class DebitSheetUpdater(DebitSheet):
         total_expense = sum([float(val[0]) for val in values])
         self.sheet.update_acell(f'E{next_row}', total_expense)
 
-    def getTotalExpense(self):
-        expenses = self.sheet.col_values(5)
-        last_total_expense = expenses[-1] if expenses and len(expenses)>1 else 0
-        return float(last_total_expense) 
+
     
-        
 class CreditSheetUpdater(CreditSheet):
-
-    def getCurrentBalance(self):
-        balances = self.sheet.col_values(5)
-        prev_balance = balances[-1] if  balances and len(balances)>1 else 0
-        return float(prev_balance)  
-
-
     def update_AddedBalance(self, date_income, added_balance, type_bal):
         next_row = self.next_available_row()
         self.sheet.update_acell(f'A{next_row}', date_income)
@@ -128,14 +177,6 @@ class CreditSheetUpdater(CreditSheet):
         else:
             self.sheet.update_acell(f'C{next_row}', added_balance)
             self.sheet.update_acell(f'B{next_row}', 0)
-        prev_balance = self.getCurrentBalance()
-        totalAddedBalance = float(self.sheet.acell(f'B{next_row}').value) + float(self.sheet.acell(f'C{next_row}').value) + prev_balance
+
+        totalAddedBalance = float(self.sheet.acell(f'B{next_row}').value) + float(self.sheet.acell(f'C{next_row}').value) 
         self.sheet.update_acell(f'D{next_row}', totalAddedBalance)
-
-
-        debitsheet = DebitSheetUpdater()
-        balance_left = totalAddedBalance - debitsheet.getTotalExpense()
-
-        self.sheet.update_acell(f'E{next_row}', round(balance_left, 2))
-
-        
