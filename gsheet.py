@@ -79,8 +79,8 @@ class BalanceSheet:
             if sheet.acell(cell).value is None:
                 sheet.update_acell(cell, placeholder)
 
-        update_if_empty('A1', 'Date')
-        update_if_empty('B1', 'Balance')
+        update_if_empty('A1', 'Balance')
+        update_if_empty('B1', 'Date')
 
         return sheet
 
@@ -95,7 +95,7 @@ class BalanceSheet:
         currbalance = float(prev_balance) 
         return currbalance
 
-    def updateBalance(self, update, expense_amount = None, added_balance = None):
+    def updateBalance(self, date, update, expense_amount = None, added_balance = None):
         
         currbalance = self.currBalance()
 
@@ -106,6 +106,7 @@ class BalanceSheet:
             currbalance += added_balance
 
         self.sheet.update_acell(f'A{self.next_available_row()}', currbalance)
+        self.sheet.update_acell(f'A{self.next_available_row()}', date)
 
 class DebitSheet:
     def __init__(self):
