@@ -125,7 +125,7 @@ class DebitSheet:
         update_if_empty('B1', 'Expense Type')
         update_if_empty('C1', 'Details')
         update_if_empty('D1', 'Expense Amount')
-        update_if_empty('E1', 'Total Expense')
+        # update_if_empty('E1', 'Total Expense')
 
         return sheet
 
@@ -163,10 +163,10 @@ class DebitSheetUpdater(DebitSheet):
         self.sheet.update_acell(f'C{next_row}', expense_details)
         self.sheet.update_acell(f'D{next_row}', expense_amount)
 
-        # sum all values 
-        values = self.sheet.batch_get(('D2:D',))[0]
-        total_expense = sum([float(val[0]) for val in values])
-        self.sheet.update_acell(f'E{next_row}', total_expense)
+        # # sum all values 
+        # values = self.sheet.batch_get(('D2:D',))[0]
+        # total_expense = sum([float(val[0]) for val in values])
+        # self.sheet.update_acell(f'E{next_row}', total_expense)
 
 
     
