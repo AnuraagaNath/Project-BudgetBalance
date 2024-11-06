@@ -21,7 +21,7 @@ if st.button('Check Balance'):
 # Debit Section
 st.markdown('### Debit')
 with st.form("Debit", clear_on_submit=True):
-    expense_type = st.selectbox('Expense Type:', ['Others', 'Cab', 'Rail', 'Metro', 'Subscription', 'Dine Out', 'Health', 'Shopping', 'Mom\'s Expense', 'Dad\'s Expense'])
+    expense_type = st.selectbox('Expense Type:', ['Others', 'Cab', 'Rail', 'Metro', 'Bus', 'Subscription', 'Dine Out', 'Health', 'Shopping', 'Mom\'s Expense', 'Dad\'s Expense'])
     expense_details = st.text_input('Enter Details')
     dateofexpense = st.date_input('Enter Date')
     expense_amount = st.number_input('Amount of the expense', value=None)
