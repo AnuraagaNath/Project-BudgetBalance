@@ -5,10 +5,10 @@ import plotly.express as px
 # from database import Database
 
 # db = Database()
-debit = Data.getDebitData()
+debit = Data().getDebitData()
 
 # credit = db.fetchCredit()
-credit = Data.getCreditData()
+credit = Data().getCreditData()
 
 # debit = db.fetchDebit()
 
