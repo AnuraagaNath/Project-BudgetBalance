@@ -1,14 +1,16 @@
 import streamlit as st
 import pandas as pd
-# from gsheet import Data
+from gsheet import Data
 import plotly.express as px
-from database import Database
+# from database import Database
 
-db = Database()
+# db = Database()
+debit = Data.getDebitData()
 
-credit = db.fetchCredit()
+# credit = db.fetchCredit()
+credit = Data.getCreditData()
 
-debit = db.fetchDebit()
+# debit = db.fetchDebit()
 
 st.title('Budget Analysis')
 
