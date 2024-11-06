@@ -15,10 +15,10 @@ credit = Data().getCreditData()
 st.title('Budget Analysis')
 
 st.text("Credits")
-st.table(credit)
+st.table(credit.tail(10))
 
 st.text("Debits")
-st.table(debit)
+st.table(debit.tail(10))
 
 # preprocessing
 debit['Date'] = pd.to_datetime(debit['Date'], format='mixed')
